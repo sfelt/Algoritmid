@@ -3,15 +3,12 @@ import java.util.*;
 
 public class SortingTask {
 
-   public static final int MAX = 128;
+   public static final int MAX = 128000;
 
    /** Main method. */
    static public void main (String[] args) {
-	  // Tehakse uus kollektsioon 
       List<Integer> randlist = new ArrayList<Integer> (MAX); // original
-      // juhuarvude generaator
       Random generaator = new Random();
-      // juhuarvude genereerimine min/max vahemiku      
       int maxKey = Math.min (1000, (MAX+32)/16);
       for (int i = 0; i < MAX; i++) {
          randlist.add (new Integer (generaator.nextInt (maxKey)));
@@ -116,43 +113,42 @@ public class SortingTask {
     * @param left starting position (included)
     * @param right ending position (excluded)
     */
-   @SuppressWarnings({ "rawtypes", "unchecked" })
-public static <T extends Object & Comparable<? super T>>
+   public static <T extends Object & Comparable<? super T>>
     void binaryInsertionSort (List<T> a, int left, int right) {
-	   // sisendikontrollid siia
-	   System.out.println("sordin");
+		for (int i = left; i < right; ++i) { // tsükkel üle kõikide elementide
+			
+			T temp = a.get(i); // jätame meelde i-nda elemendi
+			
+			int low = left; // vasakuks ääreks saab 0
+			
+			int up = i; // paremaks ääreks saab i
+			
+			// binary search selleks, et leida elemendile õiget asukohta
+			while (low != up) { // kuni vasak saab võrdseks paremaga
+				int middle = (low + up) / 2; // leiame uuritava lõigu keskmise elemendi indeksi
+				if (temp.compareTo(a.get(middle)) >= 0) 	// kui temp on suurem kui lõigu keskmine element
+					low = middle + 1; 	// võtame uue lõigu paremalt ehk siis nihutame vasaku piiri 
+										//keskmisest ühe võrra paremale
+				else
+					up = middle; /* vastasel juhul uurime edasi lõigu esimest poolt
+									ehk siis nihutame parema ääre keskele */  				
+			} // left == right ehk siis see on i-nda elemendi uueks asukohaks
 
-	   System.out.println(left);
-	   System.out.println(right);
-	//   int mid = (right - left) / 2;
-	   
-//	   T midVal = a.get(mid); // mid values is modified - bug fix - Ref @ http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html	   	   
-
-	   for (int i = left; i < right; ++i) { // intervalli sees tsükkel
-		   T temp = a.get(i); // i-s objekt tempi
-		   int vasak = left + 0; // uus vasak äär on alumine piir
-		   int parem = i; // parem äär on i ???
-		   
-		   while (vasak < parem) { // leiame uue asukoha
-			   int keskmine = left + ((vasak + parem) / 2); // lõigu keskmine
-			   System.out.print(temp + " vs " + a.get (keskmine) + ", ");
-			   
-			   if (temp.compareTo(a.get (keskmine)) > 0 ) { // kui temp on suurem kui a(i)
-				   vasak = keskmine + 1; // hüppame teisele poollõigule
-			   } else {
-				   parem = keskmine; // esimesele poollõigule
-			   }   
-		   }
-		   System.out.println("vasak:" + vasak);
-		   
-		   for (int j = i; j > (left + vasak); --j) {
-			   T k = a.get(i);
-		        a.set(i, a.get(j));
-		        a.set(j, k);
-		   }
-	   }
-	   
+			// nihutada i-ndat elementi uuele positsioonile, milleks on left <==> right, alustades kohalt i
+			for (int j = i; j > low; --j) { // tagurpidi tsükkel i-st kuni BST abil leitud õige asukohani
+				swap(a, j - 1, j); // vahetada massiivis j-s element temale eelneva elemendiga
+			}
+		}
    } // binaryInsertionSort()
+   
+   
+   
+	public static <T> void swap(List<T> list, int i, int j) { 
+		T k = list.get(i);
+		list.set(i, list.get(j));
+		list.set(j, k);
+	}
+
 
    /**
     * Sort a part of the list of comparable elements using insertion sort.
@@ -192,9 +188,8 @@ public static <T extends Object & Comparable<? super T>>
       if (r-l < 2)
          return true;
       for (int i=l; i<r-1; i++) {
-    	  System.out.println(a.get(i));
-        // if (a.get (i).compareTo (a.get (i+1)) > 0)
-         //   return false;
+         if (a.get (i).compareTo (a.get (i+1)) > 0)
+            return false;
       } // for
       return true;
    } // checkOrder()
