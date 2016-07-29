@@ -1,70 +1,131 @@
 
 
+
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Stack;
 
 public class DoubleStack {
 	private LinkedList<Double> stack;
-	
 
-		   public static void main (String[] argum) {
-		   
-		   }
+	public static void main(String[] argum) {
+		System.out.println(interpret("5 1 - 7 * 6 3 / +"));
+		System.out.println(interpret("2. 15. -"));
 
-		   DoubleStack() {
-			   stack = new LinkedList<Double>();
-		   }
+	}
 
-		   @Override
-		   public Object clone() throws CloneNotSupportedException {
-			   DoubleStack temp = new DoubleStack ();
-			return temp;
-		   }
-		  
+	DoubleStack() {
+		stack = new LinkedList<Double>();
+	}
 
-		   public boolean stEmpty() {
-		      return stack.size() == 0; // TODO!!! Your code here!
-		   }
-
-		   public void push (double a) {
-			   //magasini elemendi lisamine
-		      // TODO!!! Your code here!
-		   }
-
-		   public double pop() {
-			   //magasinist elemendi vıtmine
-		      return 0.; // TODO!!! Your code here!
-		   } // pop
-
-		   public void op (String s) {
-		      // TODO!!!
-		   }
-		  
-		   public double tos() {
-			   //tipu lugemine eemaldamiseta
-		      return 0.; // TODO!!! Your code here!
-		   }
-
-		   @Override
-		   public boolean equals (Object o) {
-			   //kahe magasini vırdsuse kindlakstegemine
-		      return true; // TODO!!! Your code here!
-		   }
-
-		   @Override
-		   public String toString() {
-			   //teisendus sıneks (tipp lıpus)
-		      return null; // TODO!!! Your code here!
-		   }
-
-		   public static double interpret (String pol) {
-		      return 0.; // TODO!!! Your code here!
-		   }
-/*aritmeetilise avaldise pˆˆratud poola kuju (sulgudeta postfikskuju, Reverse Polish Notation) pol interpreteerimiseks (v‰ljaarvutamiseks) eelpool defineeritud reaalarvude magasini abil. 
-Avaldis on antud stringina, mis vıib sisaldada reaalarve (s.h. negatiivseid ja mitmekohalisi) ning tehtem‰rke + - * / , mis on eraldatud t¸hikutega (whitespace). 
-Tulemuseks peab olema avaldise v‰‰rtus reaalarvuna vıi erindi (RuntimeException) tekitamine, kui avaldis ei ole korrektne.
-Korrektne ei ole, kui avaldises esineb lubamatuid s¸mboleid, kui avaldis j‰tab magasini ¸leliigseid elemente vıi kasutab magasinist liiga palju elemente. 
-N‰it. DoubleStack.interpret ("2. 15. -") peaks tagastama v‰‰rtuse -13. .
-*/
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		DoubleStack temp = new DoubleStack();
+		if (stack.size() > 0) {
+			for (int i = 0; i < stack.size(); i++) {
+				temp.stack.addLast(stack.get(i));
+			}
 		}
+		return temp;
+	}
+
+	public boolean stEmpty() {
+		return stack.size() == 0; // TODO!!! Your code here!
+	}
+
+	public void push(double a) {
+		stack.addLast(a);
+
+		// magasini elemendi lisamine, lisab elemendi viimaseks
+		// TODO!!! Your code here!
+	}
+
+	public double pop() {
+		if (stEmpty())
+			throw new IndexOutOfBoundsException("Magasini alat√§itumine" + Arrays.asList(stack));
+		return stack.removeLast();
+
+	} // pop
+
+	public void op(String s) {
+		if (stack.size() < 2)
+			throw new RuntimeException("Magasinis on v√§hem kui kaks arvu");
+		double arg2 = pop();
+		double arg1 = pop();
+
+		if (s.equals("+"))
+			push(arg1 + arg2);
+		else if (s.equals("-"))
+			push(arg1 - arg2);
+		else if (s.equals("*"))
+			push(arg1 * arg2);
+		else if (s.equals("/"))
+			push(arg1 / arg2);
+		else {
+			throw new IndexOutOfBoundsException("Tundmatu s√ºmbol");
+
+		}
+	}
+
+	public double tos() {
+		// tipu lugemine eemaldamiseta
+		if (stEmpty())
+			throw new IndexOutOfBoundsException("Puuduvad elemendid");
+		return stack.getLast();
+
+		// TODO!!! Your code here!a
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (stack.equals(((DoubleStack) o).stack)) {
+			return true;
+		} else {
+			return false;
+
+		}
+
+	}
+
+	@Override
+	public String toString() {
+		if (stEmpty()) {
+			return "Magasin on t√ºhi";
+
+		}
+		// teisendus s√µneks (tipp l√µpus)
+		return stack.toString();
+	}
+
+	public static double interpret(String pol) {
+
+		String[] MyArray = pol.split("\\s+");
+		String operators = "+-*/";
+		DoubleStack MinuStack = new DoubleStack();
+
+		for (String t : MyArray) {
+			if (!operators.contains(t)) {
+				try {
+					MinuStack.push(Double.parseDouble(t));
+				} catch (Exception e) {
+					throw new RuntimeException("Ei ole double");
+				}
+			} else {
+				if (MinuStack.stack.size() > 1) {		
+					MinuStack.op(t);
+				}
+			}
+		}
+			
+		if (MinuStack.stack.size() != 1) {				
+			throw new RuntimeException("Magasini suurus peab olema 1 p√§rast tehete tegemist"
+					+ Arrays.asList(MinuStack.stack) + " RPN: " + pol);
+		}
+					
+		return MinuStack.pop();
+
+	}
+}
+
 
 
