@@ -52,7 +52,23 @@
 	    */
 	   @Override
 	   public String toString() {
-	      return ""; // TODO!!!
+		   StringBuilder sb = new StringBuilder();
+			sb.append(getRpart());
+			if (getIpart() >= 0)
+				sb.append("+");
+			sb.append(getIpart());
+			if (getJpart() >= 0)
+				sb.append("i+");
+			else
+				sb.append("i");
+			sb.append(getJpart());
+			if (getKpart() >= 0)
+				sb.append("j+");
+			else
+				sb.append("j");
+			sb.append(getKpart());
+			sb.append("k");
+			return sb.toString();
 	   }
 
 	   /** Conversion from the string to the quaternion. 
