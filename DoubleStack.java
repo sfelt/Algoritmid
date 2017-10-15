@@ -1,6 +1,5 @@
 
 
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Stack;
@@ -9,8 +8,15 @@ public class DoubleStack {
 	private LinkedList<Double> stack;
 
 	public static void main(String[] argum) {
-		System.out.println(interpret("5 1 - 7 * 6 3 / +"));
-		System.out.println(interpret("2. 15. -"));
+//		System.out.println(interpret("5 1 - 7 * 6 3 / +"));
+//		System.out.println(interpret("2. 15. -"));
+//		DoubleStack.interpret ("35. 10. + -"); // RuntimeException testInterpretUnderflow
+		System.out.println(DoubleStack.interpret("1.  2.    +")); // 3.
+		System.out.println(DoubleStack.interpret("   \t \t356.  \t \t")); // 356.
+		System.out.println(DoubleStack.interpret("\t2. \t5. +   \t")); // 7.
+//		DoubleStack.interpret();
+//		DoubleStack.interpret();
+					
 
 	}
 
@@ -48,8 +54,10 @@ public class DoubleStack {
 	} // pop
 
 	public void op(String s) {
+		
 		if (stack.size() < 2)
 			throw new RuntimeException("Magasinis on vähem kui kaks arvu");
+		
 		double arg2 = pop();
 		double arg1 = pop();
 
@@ -99,22 +107,21 @@ public class DoubleStack {
 
 	public static double interpret(String pol) {
 
-		String[] MyArray = pol.split("\\s+");
+		String[] MyArray = pol.trim().split("\\s+");
 		String operators = "+-*/";
 		DoubleStack MinuStack = new DoubleStack();
 
 		for (String t : MyArray) {
-			if (!operators.contains(t)) {
+			if (operators.contains(t))
+				MinuStack.op(t);
+			else
+			{			
 				try {
 					MinuStack.push(Double.parseDouble(t));
 				} catch (Exception e) {
 					throw new RuntimeException("Ei ole double");
-				}
-			} else {
-				if (MinuStack.stack.size() > 1) {		
-					MinuStack.op(t);
-				}
-			}
+				}			
+			} 
 		}
 			
 		if (MinuStack.stack.size() != 1) {				
@@ -126,6 +133,5 @@ public class DoubleStack {
 
 	}
 }
-
 
 
