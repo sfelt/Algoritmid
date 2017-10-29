@@ -1,8 +1,5 @@
 package homework4;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.*;
 
 
@@ -23,6 +20,7 @@ public class Lfraction implements Comparable<Lfraction> {
 
    /** Main method. Different tests. */
    public static void main (String[] param) {
+/*
 	   
 	   LfractionTest test = new  LfractionTest();
 //	   test.testClone();
@@ -43,8 +41,9 @@ public class Lfraction implements Comparable<Lfraction> {
 	   test.testToDouble();
 	   test.testToLfraction();
 	   test.testToString();
-//	   test.testValueOf();
+	   test.testValueOf();
 //	   test.testZeroInverse();
+*/
 	   
    }
 
@@ -243,6 +242,7 @@ public class Lfraction implements Comparable<Lfraction> {
 	  
 	  if (numbers.length != 2)
 		   throw new RuntimeException("Peab olema täpselt kaks arvu");
+	  
 	  if (!isNumeric(numbers[0]) || !isNumeric(numbers[1]))			  
 			   throw new RuntimeException("Ei ole arv!");
 	  
@@ -259,7 +259,7 @@ public class Lfraction implements Comparable<Lfraction> {
 	    }
 	    int sz = str.length();
 	    for (int i = 0; i < sz; i++) {
-	        if (Character.isDigit(str.charAt(i)) == false) {
+	        if (Character.isDigit(str.charAt(i)) == false && str.charAt(i) != '-') {
 	            return false;
 	        }
 	    }
@@ -313,3 +313,4 @@ public class Lfraction implements Comparable<Lfraction> {
 	}
    
 }
+
