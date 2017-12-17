@@ -1,5 +1,3 @@
-
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Stack;
@@ -11,10 +9,13 @@ public class DoubleStack {
 //		System.out.println(interpret("5 1 - 7 * 6 3 / +"));
 //		System.out.println(interpret("2. 15. -"));
 //		DoubleStack.interpret ("35. 10. + -"); // RuntimeException testInterpretUnderflow
+//		System.out.println(DoubleStack.interpret("3 x")); // 7.
 		System.out.println(DoubleStack.interpret("1.  2.    +")); // 3.
 		System.out.println(DoubleStack.interpret("   \t \t356.  \t \t")); // 356.
 		System.out.println(DoubleStack.interpret("\t2. \t5. +   \t")); // 7.
-//		DoubleStack.interpret();
+//		System.out.println(DoubleStack.interpret("1. \t0. A   \t")); // 7.
+		System.out.println(DoubleStack.interpret("2. 0.  /")); // 7.
+		//		DoubleStack.interpret();
 //		DoubleStack.interpret();
 					
 
@@ -56,7 +57,7 @@ public class DoubleStack {
 	public void op(String s) {
 		
 		if (stack.size() < 2)
-			throw new RuntimeException("Magasinis on vähem kui kaks arvu");
+			throw new RuntimeException("Operatsiooni \"" +  s +  "\" sooritamiseks on vajalik vähemalt kaks reaalarvu");
 		
 		double arg2 = pop();
 		double arg1 = pop();
@@ -70,8 +71,7 @@ public class DoubleStack {
 		else if (s.equals("/"))
 			push(arg1 / arg2);
 		else {
-			throw new IndexOutOfBoundsException("Tundmatu sümbol");
-
+			throw new IndexOutOfBoundsException("Tundmatu operatsioon:  \"" +  s + "\"");
 		}
 	}
 
@@ -95,6 +95,7 @@ public class DoubleStack {
 
 	}
 
+	
 	@Override
 	public String toString() {
 		if (stEmpty()) {
@@ -119,7 +120,7 @@ public class DoubleStack {
 				try {
 					MinuStack.push(Double.parseDouble(t));
 				} catch (Exception e) {
-					throw new RuntimeException("Ei ole double");
+					throw new RuntimeException("Leitud sõnet ei ole võimalik konverteerida reaalarvuks: \"" + t + "\"" );
 				}			
 			} 
 		}
@@ -133,5 +134,3 @@ public class DoubleStack {
 
 	}
 }
-
-
