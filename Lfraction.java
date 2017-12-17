@@ -20,7 +20,7 @@ public class Lfraction implements Comparable<Lfraction> {
 
    /** Main method. Different tests. */
    public static void main (String[] param) {
-/*
+
 	   
 	   LfractionTest test = new  LfractionTest();
 //	   test.testClone();
@@ -43,7 +43,7 @@ public class Lfraction implements Comparable<Lfraction> {
 	   test.testToString();
 	   test.testValueOf();
 //	   test.testZeroInverse();
-*/
+
 	   
    }
 
@@ -51,7 +51,7 @@ public class Lfraction implements Comparable<Lfraction> {
 	private long denominator;
 	
 	/** Return the numerator */
-	public final long numerator()
+	public /*final */ long numerator() // viga, ei pea olema final
 	{
 		return numerator;
 	}
@@ -68,7 +68,7 @@ public class Lfraction implements Comparable<Lfraction> {
     */
    public Lfraction (long a, long b) {
 	   if (b == 0)
-		   throw new RuntimeException("Nulliga jagamine!");   
+		   throw new RuntimeException("Nulliga jagamine ei ole lubatud!"); 
 	   normalizeAndSet(a, b);
    }
 
@@ -92,9 +92,9 @@ public class Lfraction implements Comparable<Lfraction> {
     */
    @Override
    public String toString() {
-		if (denominator() == 1)
-			return "" + numerator();
-		else
+//		if (denominator() == 1)
+//			return "" + numerator();
+//		else
 			return numerator() + "/" + denominator();
    }
 
@@ -109,10 +109,17 @@ public class Lfraction implements Comparable<Lfraction> {
 
    /** Hashcode has to be equal for equal fractions.
     * @return hashcode
+    * https://stackoverflow.com/questions/113511/best-implementation-for-hashcode-method
     */
    @Override
    public int hashCode() {
-	   return (int) (numerator ^ denominator);
+	    // Start with a non-zero constant. Prime is preferred
+	    int result = 17;
+	    
+	    result = 31 * result + (int)(numerator ^ (denominator >>> 32)); 	    
+	    return result;	   
+   
+//	   return (int) (numerator ^ denominator);
    }
 
    /** Sum of fractions.
@@ -143,6 +150,9 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return inverse of this fraction: 1/this
     */
    public Lfraction inverse() {
+	   // 	
+	   if (numerator == 0)
+		    throw new IllegalArgumentException("Murru nimetaja ei tohi pööramise järel olla 0!");	   
 	   return new Lfraction(denominator(),numerator());
    }
 
@@ -241,10 +251,15 @@ public class Lfraction implements Comparable<Lfraction> {
 	  String[] numbers = s.split("/");
 	  
 	  if (numbers.length != 2)
-		   throw new RuntimeException("Peab olema täpselt kaks arvu");
+		   throw new RuntimeException("Sisestatud sõne peab sisaldama täpselt kaks arvu, sisendis on: \"" + s + "\"");
 	  
-	  if (!isNumeric(numbers[0]) || !isNumeric(numbers[1]))			  
-			   throw new RuntimeException("Ei ole arv!");
+	  // kas lugejas on arv?
+	  if (!isNumeric(numbers[0]))
+		   throw new RuntimeException("Sisestatud murru lugeja ei ole arv: \"" + numbers[0] + "\"" );
+	  
+	// kas nimetajas on arv?
+	  if(!isNumeric(numbers[1]))
+			throw new RuntimeException("Sisestatud murru nimetaja ei ole arv: \"" + numbers[1] + "\"" );		  
 	  
 	  return new Lfraction(Long.parseLong(numbers[0]), Long.parseLong(numbers[1]));
    }
