@@ -1,5 +1,9 @@
 import java.util.*;
 
+//viited
+//https://en.wikipedia.org/wiki/Permutation#Generation_in_lexicographic_order
+//https://stackoverflow.com/questions/2710713/algorithm-to-generate-all-possible-permutations-of-a-list
+
 public class Puzzle {
     public static void main(String[] args) {
 
