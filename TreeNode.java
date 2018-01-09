@@ -1,5 +1,11 @@
 import java.util.*;
 
+//viited
+//https://math.stackexchange.com/questions/588230/how-to-convert-parentheses-notation-for-trees-into-an-actual-tree-drawing
+//https://stackoverflow.com/questions/4411267/parenthesis-representation-of-bintree-to-bintree
+
+
+
 public class TreeNode {
     private String name;
     private TreeNode firstChild;
